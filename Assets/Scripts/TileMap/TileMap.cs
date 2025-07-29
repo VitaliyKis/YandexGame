@@ -11,15 +11,14 @@ public class TileMap : MonoBehaviour
 
 
 
-    public List<Mob> mobs;
     public List<MobCreator> creators;
 
-    public TriangleMobCreator triangleMobCreator;
 
     private void Start()
     {
-        triangleMobCreator.CreateMob(Vector2.zero);
+        FillMap();
     }
+   
  
     private GameObject CheckTile(Vector2 startPoint, Vector2 checkDirection)
     {
@@ -29,77 +28,24 @@ public class TileMap : MonoBehaviour
 
             if (hit.collider == null)
             {
-                Debug.DrawRay(ray.origin, ray.direction * 20, Color.green, 10000f);
+                Debug.DrawRay(ray.origin, ray.direction * 20, Color.green, 0.05f);
                 return null;
                 
             }
             else
             {
 
-                Debug.DrawLine(ray.origin, hit.point, Color.red, 10000f);
-                Debug.DrawRay(hit.point, ray.direction * 20f, Color.green, 10000f);
-                
-                return hit.collider.gameObject;
+                Debug.DrawLine(ray.origin, hit.point, Color.red, 0.05f);
+                Debug.DrawRay(hit.point, ray.direction * 20f, Color.green, 0.05f);
+               
+            return hit.collider.gameObject;
             }
             
     }
     private void FillMap()
     {
-        
-       
+        StartCoroutine(go());
 
-
-
-               StartCoroutine(go());
-
-
-                //List<Mob> correctNeighbours = mobs;
-
-                ////GameObject downNeighbour = CheckTile(new Vector2(x,y - tileSize), Vector2.down); // Ïðîâåðÿåì íèç
-                ////if (downNeighbour != null)
-                ////{
-                ////    string downMobName = downNeighbour.GetComponent<Mob>().GetType().Name;
-
-                ////    for (int i = 0; i < correctNeighbours.Count; i++)
-                ////    {
-                ////        if (correctNeighbours[i].GetType().Name == downMobName)
-                ////        {
-                ////            correctNeighbours.RemoveAt(i);
-                ////        }
-                ////    }
-
-
-                ////}
-
-
-                //Debug.Log(mobs.Count);
-                //Debug.Log("--------------------------------------");
-                //GameObject leftNeighbour = CheckTile(new Vector2(x - tileSize, y), Vector2.left); // Ïðîâåðÿåì ëåâî
-                //if (leftNeighbour != null)
-                //{
-                //    string leftMobName = leftNeighbour.GetComponent<Mob>().GetType().Name;
-
-                //    for (int i = 0; i < correctNeighbours.Count; i++)
-                //    {
-                //        if (correctNeighbours[i].GetType().Name == leftMobName)
-                //        {
-                //            correctNeighbours.RemoveAt(i);
-                //        }
-                //    }
-                //    Debug.Log(mobs.Count);
-
-                //}
-
-                //int index = UnityEngine.Random.Range(0, correctNeighbours.Count - 1);
-
-                //Instantiate(correctNeighbours[index], new Vector2(x, y), Quaternion.identity);
-
-
-                //Debug.Log("NEXT");
-
-
-            
-        
     }
 
           
@@ -111,15 +57,30 @@ public class TileMap : MonoBehaviour
         {
             for (int x = 0; x < mapSize; x++)
             {
+                List<MobCreator> correctList = new List<MobCreator>();
+                foreach (MobCreator creators in creators)
+                {
+                    correctList.Add(creators);
+                }
                 GameObject leftGO = CheckTile(new Vector2(x - tileSize, y), Vector2.left);
                 if (leftGO != null)
                 {
                     Mob leftMob = leftGO.GetComponent<Mob>();
+                    correctList.Remove(leftMob.ÑreatorType);
                     
                 }
                 GameObject downGO = CheckTile(new Vector2(x, y - tileSize), Vector2.down);
+                if (downGO != null)
+                {
+                    Mob downMob = downGO.GetComponent<Mob>();
+                    correctList.Remove(downMob.ÑreatorType);
+
+                }
+
+
+                correctList[Random.RandomRange(0,correctList.Count)].CreateMob(new Vector2(x, y));
                 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.05f);
             }
         }
     }

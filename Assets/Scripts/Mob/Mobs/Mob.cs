@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Mob : MonoBehaviour
 {
-   public abstract MobCreator Ñreator { get;  set; }
+   public abstract MobCreator ÑreatorType { get;  set; }
 }

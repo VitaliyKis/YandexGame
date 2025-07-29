@@ -1,13 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.iOS.Xcode;
 using UnityEngine;
 
-public class TriangleMobCreator : MobCreator
+public class CircleMobCreator : MobCreator
 {
-
-    public TriangleMob triangleMobPrefab;
+    public CircleMob circleMobPrefab;
     public override Mob CreateMob(Vector2 mobPlace)
     {
         return InitMob(mobPlace);
@@ -15,7 +12,7 @@ public class TriangleMobCreator : MobCreator
 
     protected override Mob InitMob(Vector2 mobPlace)
     {
-        TriangleMob mob = Instantiate(triangleMobPrefab,mobPlace,Quaternion.identity);
+        CircleMob mob = Instantiate(circleMobPrefab, mobPlace, Quaternion.identity);
         mob.ÑreatorType = this;
         return mob;
     }

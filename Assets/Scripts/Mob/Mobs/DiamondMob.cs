@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class DiamondMob : Mob
 {
-    public override MobCreator Ñreator { get; set; }
+    public override MobCreator ÑreatorType { get; set; }
    
 }

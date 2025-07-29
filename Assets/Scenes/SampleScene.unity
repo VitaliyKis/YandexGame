@@ -754,12 +754,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e90783d2755390429faebac755b6b13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobs:
-  - {fileID: 4687357110255636298, guid: 537632afc428209429d65bbb38da03df, type: 3}
-  - {fileID: 5492569566271537496, guid: 064ae32e3a650224bb6242361bbac294, type: 3}
-  - {fileID: -6836345121760378966, guid: 1083787563f38e34aa1f2733c6e3d594, type: 3}
-  creators: []
-  triangleMobCreator: {fileID: 861981306}
+  creators:
+  - {fileID: 861981306}
+  - {fileID: 1424767895}
+  - {fileID: 2136754691}
+  - {fileID: 1081434002}
 --- !u!1 &290957255
 GameObject:
   m_ObjectHideFlags: 0
@@ -2233,6 +2232,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1081434001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1081434003}
+  - component: {fileID: 1081434002}
+  m_Layer: 0
+  m_Name: HexagonMobCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1081434002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081434001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a31e68d011eed948ba444135bb509a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexagonMobPrefab: {fileID: 6341381972405597252, guid: cefcc4d3033298f498b6f054a30a5f19, type: 3}
+--- !u!4 &1081434003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081434001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -61.417088, y: -19.647308, z: -0.032265034}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1081493834
 GameObject:
   m_ObjectHideFlags: 0
@@ -3321,6 +3365,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1424767894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1424767896}
+  - component: {fileID: 1424767895}
+  m_Layer: 0
+  m_Name: CircleMobCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1424767895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424767894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501b463c9951754478dd0dc8c67c80f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circleMobPrefab: {fileID: 5492569566271537496, guid: 064ae32e3a650224bb6242361bbac294, type: 3}
+--- !u!4 &1424767896
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424767894}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4350604, y: -2.8795977, z: 92.61173}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1445865092
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,3 +4680,48 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2136754690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2136754692}
+  - component: {fileID: 2136754691}
+  m_Layer: 0
+  m_Name: DiamondMobCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2136754691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136754690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88bae7992c866c458af735b501e6e7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diamondMobPrefab: {fileID: -6836345121760378966, guid: 1083787563f38e34aa1f2733c6e3d594, type: 3}
+--- !u!4 &2136754692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136754690}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4350604, y: -2.8795977, z: 92.61173}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
