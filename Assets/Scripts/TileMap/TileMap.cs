@@ -5,22 +5,93 @@ using UnityEngine;
 
 public class TileMap : MonoBehaviour
 {
-    private int mapSize = 7;
-    private int tileSize = 1;
-
-
-
+    public int mapSize = 7;
+    public int tileSize = 1;
 
     public List<MobCreator> creators;
+    public TileSpawner spawner;
+    public StateContext stateContext;
+    public Mob[,] mobs;
 
-
+    private List<GameObject> neighboursList;
+    private void Awake()
+    {
+        EventBus.PickMobEvent += PickMob;
+    }
+    private void OnDestroy()
+    {
+        EventBus.PickMobEvent -= PickMob;
+    }
     private void Start()
     {
+        mobs = new Mob[mapSize, mapSize];
         FillMap();
+        StartStateMachine();
     }
-   
- 
-    private GameObject CheckTile(Vector2 startPoint, Vector2 checkDirection)
+
+    private void StartStateMachine()
+    {
+        
+        stateContext = new StateContext(new IddleState(stateContext));
+        stateContext.tileMap = this;
+    }
+    private void PickMob(Mob pickedMob)
+    {
+        if (stateContext.GetState() is PickedMobState)
+        {
+            for (int i = 0; i < neighboursList.Count; i++)
+            {
+                if (pickedMob.gameObject == neighboursList[i])
+                {
+                    PickedMobState currentState = (PickedMobState)stateContext.GetState();
+                    currentState.ExitPickedState();
+                    stateContext.SwitchState(new IddleState(stateContext));
+
+                    //äîïèñàòü ñâàï ïëèòîê
+
+                    ShowAllTiles();
+                }
+            }
+            
+        }
+        else
+        {
+            PickedMobState currentState = new PickedMobState(stateContext);
+            stateContext.SwitchState(currentState);
+            neighboursList = currentState.EnterPickedState(pickedMob);
+            HideOtherTiles(neighboursList);
+        }
+    }
+    private void HideOtherTiles(List<GameObject> neighbours)
+    {
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+                mobs[x,y].gameObject.SetActive(false); 
+            }
+        }
+        foreach (GameObject mob in neighbours)
+        {
+            if (mob != null)
+            {
+                mob.SetActive(true);
+            }
+        }
+    }
+    private void ShowAllTiles()
+    {
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+
+                mobs[x,y].gameObject.SetActive(true); 
+            }
+        }
+    }
+
+    public GameObject CheckTile(Vector2 startPoint, Vector2 checkDirection)
     {
             Ray2D ray = new Ray2D(startPoint, checkDirection);
 
@@ -44,46 +115,14 @@ public class TileMap : MonoBehaviour
     }
     private void FillMap()
     {
-        StartCoroutine(go());
+        spawner.Spawn();
 
     }
-
-          
-            
     
-    IEnumerator go()
-    {
-        for (int y = 0; y < mapSize; y++)
-        {
-            for (int x = 0; x < mapSize; x++)
-            {
-                List<MobCreator> correctList = new List<MobCreator>();
-                foreach (MobCreator creators in creators)
-                {
-                    correctList.Add(creators);
-                }
-                GameObject leftGO = CheckTile(new Vector2(x - tileSize, y), Vector2.left);
-                if (leftGO != null)
-                {
-                    Mob leftMob = leftGO.GetComponent<Mob>();
-                    correctList.Remove(leftMob.ÑreatorType);
-                    
-                }
-                GameObject downGO = CheckTile(new Vector2(x, y - tileSize), Vector2.down);
-                if (downGO != null)
-                {
-                    Mob downMob = downGO.GetComponent<Mob>();
-                    correctList.Remove(downMob.ÑreatorType);
-
-                }
 
 
-                correctList[Random.RandomRange(0,correctList.Count)].CreateMob(new Vector2(x, y));
-                
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-    }
+
+
 }
    
    

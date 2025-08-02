@@ -5,4 +5,8 @@ using UnityEngine;
 public abstract class Mob : MonoBehaviour
 {
    public abstract MobCreator ÑreatorType { get;  set; }
+    private void OnMouseDown()
+    {
+        EventBus.PickMobEvent(this);
+    }
 }
