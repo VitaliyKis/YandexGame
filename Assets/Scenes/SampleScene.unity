@@ -1810,7 +1810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaad17694eeb0e544b7a8a2e914cc13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triangleMobPrefab: {fileID: 4687357110255636298, guid: 537632afc428209429d65bbb38da03df, type: 3}
+  triangleMobPrefab: {fileID: 5551113317773963048, guid: e014a4b9f1429404ca6182fe58ca3c79, type: 3}
 --- !u!1 &914182100
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,7 +2344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a31e68d011eed948ba444135bb509a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexagonMobPrefab: {fileID: 6341381972405597252, guid: cefcc4d3033298f498b6f054a30a5f19, type: 3}
+  hexagonMobPrefab: {fileID: 2360727314111615489, guid: 2413bfe30ede14b4eb094252c59d6c70, type: 3}
 --- !u!4 &1081434003
 Transform:
   m_ObjectHideFlags: 0
@@ -3477,7 +3477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501b463c9951754478dd0dc8c67c80f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleMobPrefab: {fileID: 5492569566271537496, guid: 064ae32e3a650224bb6242361bbac294, type: 3}
+  circleMobPrefab: {fileID: 7017392774716119481, guid: 3c986105dc6d5a940a3c36d7d26f7979, type: 3}
 --- !u!4 &1424767896
 Transform:
   m_ObjectHideFlags: 0
@@ -4792,7 +4792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88bae7992c866c458af735b501e6e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diamondMobPrefab: {fileID: -6836345121760378966, guid: 1083787563f38e34aa1f2733c6e3d594, type: 3}
+  diamondMobPrefab: {fileID: 5555563896925230535, guid: 246b01bd7bc54764fa48d1c93ae6c140, type: 3}
 --- !u!4 &2136754692
 Transform:
   m_ObjectHideFlags: 0

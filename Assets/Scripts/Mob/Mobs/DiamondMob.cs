@@ -5,5 +5,9 @@ using UnityEngine;
 public class DiamondMob : Mob
 {
     public override MobCreator ÑreatorType { get; set; }
-   
+    public override string MobType { get; set; }
+    public DiamondMob()
+    {
+        MobType = "DiamondMob";
+    }
 }
