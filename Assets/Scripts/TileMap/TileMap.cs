@@ -8,7 +8,7 @@ public class TileMap : MonoBehaviour
 
     public List<MobCreator> creators;
     public TileSpawner spawner;
-    public StateContext stateContext;
+    public StateContext context;
     public Mob[,] mobs;
 
     private List<GameObject> neighboursList;
@@ -31,20 +31,20 @@ public class TileMap : MonoBehaviour
     private void StartStateMachine()
     {
         
-        stateContext = new StateContext(new IddleState(stateContext));
-        stateContext.tileMap = this;
+        context = new StateContext(new IddleState(context));
+        context.tileMap = this;
     }
     private void PickMob(Mob pickedMob)
     {
 
-        if (stateContext.GetState() is PickedMobState)
+        if (context.GetState() is PickedMobState)
         {
             //Проверка на тот же слот
             if (pickedMob.gameObject == selectedMob.gameObject)
             {
-                PickedMobState currentState = (PickedMobState)stateContext.GetState();
+                PickedMobState currentState = (PickedMobState)context.GetState();
                 currentState.ExitPickedState();
-                stateContext.SwitchState(new IddleState(stateContext));
+                context.SwitchState(new IddleState(context));
                 ShowAllTiles();
 
             }
@@ -54,22 +54,10 @@ public class TileMap : MonoBehaviour
                 if (pickedMob.gameObject == neighboursList[i])
                 {
 
-                    PickedMobState currentState = (PickedMobState)stateContext.GetState();
+                    PickedMobState currentState = (PickedMobState)context.GetState();
                     currentState.ExitPickedState();
-                    stateContext.SwitchState(new IddleState(stateContext));
-
                     ReplaceGameObjects(selectedMob,pickedMob);
-                    bool IsCombosDeleted;
-                    do
-                    {
-                        IsCombosDeleted = DeleteMatch();
-                        if (IsCombosDeleted)
-                        {
-                            ShiftTiles();
-                            FillEmptyPlaces();
-                        }
-                    }
-                    while (IsCombosDeleted == true);
+                    context.SwitchState(new SearchingMatchState(context));
                     ShowAllTiles();
                     break;
                 }
@@ -82,142 +70,13 @@ public class TileMap : MonoBehaviour
         else
         {
             selectedMob = pickedMob;
-            PickedMobState currentState = new PickedMobState(stateContext);
-            stateContext.SwitchState(currentState);
+            PickedMobState currentState = new PickedMobState(context);
+            context.SwitchState(currentState);
             neighboursList = currentState.EnterPickedState(pickedMob);
             HideOtherTiles(neighboursList);
         }
     }
-    public void FillEmptyPlaces()
-    {
-        
-        int y = mapSize - 1;
-        for (int x = 0; x < mapSize; x++)
-        {
-            if (mobs[x, mapSize - 1] == null)
-            {
-           
-                int offsetY = 0;
-                while (y - offsetY >= 0 && mobs[x, y - offsetY] == null)
-                {
-                    offsetY++;
-                    
-                }
-                if (y - offsetY >= 0)
-                {
-                    offsetY = offsetY - 1;
-                    while (offsetY >= 0)
-                    {
-                        mobs[x, y - offsetY] = creators[Random.Range(0, creators.Count - 1)].CreateMob(new Vector2(x, y - offsetY));
-                        offsetY--;
-                    }
-                }
-            }
-        }
-    }
-    public bool DeleteMatch()
-    {
-        bool IsFinded = false;
-        bool[,] toRemove = new bool[mapSize,mapSize]; // без инициализации каждая переменная равна false
-
-        for (int x = 0; x < mapSize; x++)
-        {
-            for (int y = 0; y < mapSize; y++)
-            {
-               
-              
-               int runLenX = 1;
-                
-                while (x + runLenX < mapSize && mobs[x + runLenX, y].MobType == mobs[x, y].MobType)//совпадение по оси x
-                {
-                    runLenX++;
-                }
-                if (runLenX >= 3)
-                {
-                    for (int k = 0; k < runLenX; k++)
-                    {
-                        IsFinded = true;
-                        toRemove[x + k, y] = true;
-                    }
-                }
-                int runLenY = 1;
-
-                while (y + runLenY < mapSize && mobs[x, y + runLenY].MobType == mobs[x, y].MobType)//совпадение по оси y
-                {
-                    runLenY++;
-                }
-                if (runLenY >= 3)
-                {
-                    for (int k = 0; k < runLenY; k++)
-                    {
-                        IsFinded = true;
-                        toRemove[x, y + k] = true;
-                    }
-                }
-                
-            }
-        }
-        if (IsFinded == false)
-        {
-            return false;
-        }
-        else
-        {
-            RemoveMatchTiles(toRemove);
-            return true;
-        }
-    }
-
-    public void RemoveMatchTiles(bool[,] matchTiles)
-    {
-        for (int x = 0; x < mapSize; x++)
-        {
-           for (int y = 0; y < mapSize; y++)
-            {
-                if (matchTiles[x, y] == true)
-                {
-                    if (mobs[x,y] != null) // Потом удалить, так как клетки будут заполнятся
-                    {
-                        Destroy(mobs[x, y].gameObject);
-                        mobs[x,y] = null;  
-                    }
-                    
-                    
-                }
-            }
-
-        }
-    }
-
-
-
-    public void ShiftTiles()
-    {
-
-        for (int x = 0; x < mapSize; x++)
-        {
-            for (int y = 0; y < mapSize ; y++)
-            {
-                if (mobs[x, y] == null)
-                {
-                  
-                    int offset = 1;
-                    while (offset + y < mapSize && mobs[x, offset + y] == null)
-                    {
-                        offset++;
-                    }
-                    if (y + offset < mapSize)
-                    {
-                        mobs[x, y + offset].transform.position = new Vector3(x, y, 0f);
-                        mobs[x, y] = mobs[x, y + offset];
-                        mobs[x, y + offset] = null;
-                    }
-
-                    
-                }
-            }
-        }
-    }
+    
     private void ReplaceGameObjects(Mob firstMob,Mob secondMob)
     {
 
