@@ -4,13 +4,22 @@ using UnityEngine;
 
 public abstract class Mob : MonoBehaviour
 {
-   public abstract MobCreator ÑreatorType { get;  set; }
-   public abstract string MobType {  get; set; }
+    public abstract MobCreator ÑreatorType { get;  set; }
+    public abstract string MobType {  get; set; }
+
+    public ParticleSystem particleSystem;
+
+    public bool IsBlocked;
+    public Color particleColor;
 
     
     private void OnMouseDown()
     {
-        EventBus.PickMobEvent(this);
+        if (IsBlocked == false)
+        {
+            EventBus.PickMobEvent(this);
+        }
+        
 
     }
 }

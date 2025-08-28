@@ -14,6 +14,8 @@ public class CircleMobCreator : MobCreator
     {
         CircleMob mob = Instantiate(circleMobPrefab, mobPlace, Quaternion.identity);
         mob.ÑreatorType = this;
+        mob.IsBlocked = true;
+        mob.particleColor = Color.green;
         return mob;
     }
 }

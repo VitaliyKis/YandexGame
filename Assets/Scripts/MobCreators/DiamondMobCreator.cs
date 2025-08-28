@@ -12,6 +12,9 @@ public class DiamondMobCreator : MobCreator
     {
         DiamondMob mob = Instantiate(diamondMobPrefab, mobPlace, Quaternion.identity);
         mob.ÑreatorType = this;
+        mob.IsBlocked = true;
+        mob.particleColor = Color.blue;
+
         return mob;
     }
 }

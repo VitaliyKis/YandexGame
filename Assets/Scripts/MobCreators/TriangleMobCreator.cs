@@ -17,6 +17,9 @@ public class TriangleMobCreator : MobCreator
     {
         TriangleMob mob = Instantiate(triangleMobPrefab,mobPlace,Quaternion.identity);
         mob.ÑreatorType = this;
+        mob.IsBlocked = true;
+        mob.particleColor = Color.red;
+
         return mob;
     }
 }

@@ -13,6 +13,10 @@ public class TileMap : MonoBehaviour
 
     private List<GameObject> neighboursList;
     private Mob selectedMob;
+
+    public StartCoroutineManager startCoroutineManager;
+
+    public ParticleObjectPool particlePool;
     private void Awake()
     {
         EventBus.PickMobEvent += PickMob;
@@ -26,45 +30,39 @@ public class TileMap : MonoBehaviour
         mobs = new Mob[mapSize, mapSize];
         FillMap();
         StartStateMachine();
+        AllowAllTilesToTouch();
+
     }
 
     private void StartStateMachine()
     {
-        
-        context = new StateContext(new IddleState(context));
-        context.tileMap = this;
+        context = new StateContext(this, new IddleState(context));
     }
     private void PickMob(Mob pickedMob)
     {
 
         if (context.GetState() is PickedMobState)
         {
-            //Проверка на тот же слот
+            PickedMobState currentState = (PickedMobState)context.GetState();
             if (pickedMob.gameObject == selectedMob.gameObject)
             {
-                PickedMobState currentState = (PickedMobState)context.GetState();
                 currentState.ExitPickedState();
                 context.SwitchState(new IddleState(context));
                 ShowAllTiles();
 
             }
-            //Проверка на соседей
-            for (int i = 0; i < neighboursList.Count; i++)
+            else
             {
-                if (pickedMob.gameObject == neighboursList[i])
-                {
+                currentState.ExitPickedState();
+                ReplaceGameObjects(selectedMob,pickedMob);
+                context.SwitchState(new SearchingMatchState(context,startCoroutineManager, particlePool));
+                ShowAllTiles();
 
-                    PickedMobState currentState = (PickedMobState)context.GetState();
-                    currentState.ExitPickedState();
-                    ReplaceGameObjects(selectedMob,pickedMob);
-                    context.SwitchState(new SearchingMatchState(context));
-                    ShowAllTiles();
-                    break;
-                }
-                
             }
 
-        
+
+
+
         }
         
         else
@@ -73,7 +71,7 @@ public class TileMap : MonoBehaviour
             PickedMobState currentState = new PickedMobState(context);
             context.SwitchState(currentState);
             neighboursList = currentState.EnterPickedState(pickedMob);
-            HideOtherTiles(neighboursList);
+            HideOtherTiles(neighboursList, pickedMob.gameObject);
         }
     }
     
@@ -92,7 +90,53 @@ public class TileMap : MonoBehaviour
         secondMob.gameObject.transform.position = firstPos;
 
     }
-    private void HideOtherTiles(List<GameObject> neighbours)
+    private void HideOtherTiles(List<GameObject> neighbours, GameObject pickedMob)
+    {
+        BlockAllTilesToTouch();
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+                if (mobs[x, y] != null)
+                {
+
+                    SpriteRenderer spriteRenderer = mobs[x, y].gameObject.GetComponent<SpriteRenderer>();
+                    spriteRenderer.material.color = new Color(spriteRenderer.material.color.r, spriteRenderer.material.color.g, spriteRenderer.material.color.b, 0.5f);
+
+                }
+            }
+        }
+        foreach (GameObject mob in neighbours)
+        {
+            if (mob != null)
+            {
+                mob.GetComponent<Mob>().IsBlocked = false;
+                SpriteRenderer spriteRenderer = mob.gameObject.GetComponent<SpriteRenderer>();
+                spriteRenderer.material.color = new Color(spriteRenderer.material.color.r, spriteRenderer.material.color.g, spriteRenderer.material.color.b, 1f);
+
+            }
+        }
+
+        pickedMob.GetComponent<Mob>().IsBlocked = false;
+        SpriteRenderer spriteRendere = pickedMob.gameObject.GetComponent<SpriteRenderer>();
+        spriteRendere.material.color = new Color(spriteRendere.material.color.r, spriteRendere.material.color.g, spriteRendere.material.color.b, 1f);
+    }
+    public void BlockAllTilesToTouch()
+    {
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+                if (mobs[x, y] != null)
+                {
+                    
+                    mobs[x, y].GetComponent<Mob>().IsBlocked = true;
+
+                }
+            }
+        }
+    }
+    public void AllowAllTilesToTouch()
     {
         for (int y = 0; y < mapSize; y++)
         {
@@ -101,26 +145,11 @@ public class TileMap : MonoBehaviour
                 if (mobs[x, y] != null)
                 {
 
-                SpriteRenderer spriteRenderer = mobs[x, y].gameObject.GetComponent<SpriteRenderer>();
-                spriteRenderer.material.color = new Color(spriteRenderer.material.color.r, spriteRenderer.material.color.g, spriteRenderer.material.color.b, 0.5f);
-                
+                    mobs[x, y].GetComponent<Mob>().IsBlocked = false;
+
                 }
             }
         }
-        foreach (GameObject mob in neighbours)
-        {
-            if (mob != null)
-            {
-                SpriteRenderer spriteRenderer = mob.gameObject.GetComponent<SpriteRenderer>();
-                spriteRenderer.material.color = new Color(spriteRenderer.material.color.r, spriteRenderer.material.color.g, spriteRenderer.material.color.b, 1f);
-
-            }
-        }
-        SpriteRenderer spriteRendere = selectedMob.gameObject.GetComponent<SpriteRenderer>();
-        spriteRendere.material.color = new Color(spriteRendere.material.color.r, spriteRendere.material.color.g, spriteRendere.material.color.b, 1f);
-
-
-
     }
     private void ShowAllTiles()
     {
@@ -133,6 +162,7 @@ public class TileMap : MonoBehaviour
                     SpriteRenderer spriteRenderer = mobs[x, y].gameObject.GetComponent<SpriteRenderer>();
                     spriteRenderer.material.color = new Color(spriteRenderer.material.color.r, spriteRenderer.material.color.g, spriteRenderer.material.color.b, 1f);
                 }
+
             }
         }
     }
@@ -145,16 +175,11 @@ public class TileMap : MonoBehaviour
 
             if (hit.collider == null)
             {
-                //Debug.DrawRay(ray.origin, ray.direction * 20, Color.green, 1f);
                 return null;
                 
             }
             else
             {
-
-                //Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
-                //Debug.DrawRay(hit.point, ray.direction * 20f, Color.green, 1f);
-               
             return hit.collider.gameObject;
             }
             

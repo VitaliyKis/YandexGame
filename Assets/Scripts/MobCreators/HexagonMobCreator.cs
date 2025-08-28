@@ -14,6 +14,9 @@ public class HexagonMobCreator : MobCreator
     {
         HexagonMob mob = Instantiate(hexagonMobPrefab, mobPlace, Quaternion.identity);
         mob.ÑreatorType = this;
+        mob.IsBlocked = true;
+        mob.particleColor = Color.yellow;
+
         return mob;
     }
 }

@@ -18,6 +18,7 @@ public class PickedMobState : State
         result.Add(leftGO);
         result.Add(rightG);
         Debug.Log("Picked State Enter");
+        
         return result;
 
     }

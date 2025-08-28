@@ -15,13 +15,13 @@ public class StateContext
     }
     public State GetState()
     {
-    return this.state;
+        return this.state;
     }
    
-    public StateContext(State state)
+    public StateContext(TileMap tileMap,State state)
     {
+        this.tileMap = tileMap;
         this.state = state;
-        state.EnterState();
     }
 }
 

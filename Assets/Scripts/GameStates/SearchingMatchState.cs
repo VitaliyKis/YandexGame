@@ -5,16 +5,19 @@ using UnityEngine;
 public class SearchingMatchState : State
 {
     public override StateContext context { get; set; }
+    private StartCoroutineManager startCoroutineManager;
+    ParticleObjectPool particlePool;
 
     public override void EnterState()
     {
+        context.tileMap.BlockAllTilesToTouch();
         Debug.Log("SearchingMatch State Enter");
         FindMatchMobs();
     }
     public void FindMatchMobs()
     {
         bool IsFinded = false;
-        bool[,] toRemove = new bool[context.tileMap.mapSize, context.tileMap.mapSize]; // без инициализации каждая переменная равна false
+        bool[,] toRemove = new bool[context.tileMap.mapSize, context.tileMap.mapSize];
 
         for (int x = 0; x < context.tileMap.mapSize; x++)
         {
@@ -60,8 +63,9 @@ public class SearchingMatchState : State
         }
         else
         {
-            context.SwitchState(new DeleteAndShiftMobsState(context, toRemove));
-           
+            context.SwitchState(new DeleteAndShiftMobsState(context, toRemove,startCoroutineManager,particlePool));
+
+
         }
     }
 
@@ -70,8 +74,10 @@ public class SearchingMatchState : State
         Debug.Log("SearchingMatch State State Exit");
     }
 
-    public SearchingMatchState(StateContext context)
+    public SearchingMatchState(StateContext context, StartCoroutineManager startCoroutineManager, ParticleObjectPool particlePool)
     {
         this.context = context;
+        this.startCoroutineManager = startCoroutineManager;
+        this.particlePool = particlePool;
     }
 }

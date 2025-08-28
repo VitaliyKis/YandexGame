@@ -9,6 +9,7 @@ public class IddleState : State
 
     public override void EnterState()
     {
+        context.tileMap.AllowAllTilesToTouch();
         Debug.Log("Iddle State Enter");
     }
 
